@@ -99,7 +99,8 @@
 </section>
 
 <section id="inbox" class="view">
- <div class="panel"><div class="panel-head"><h2>AI Inbox</h2><button class="btn primary" onclick="notify('Inbox re-analyzed by AI')">✦ Analyze inbox</button></div><div id="inboxList"></div></div>
+ <div class="panel"><div class="panel-head"><h2>AI Inbox</h2><button class="btn primary" onclick="analyzeInbox()">✦ Analyze inbox</button></div><div id="aiAnalysisStatus" class="ai-analysis-status" style="display:none"></div>
+    <div id="inboxList"></div></div>
 </section>
 
 <section id="tasks" class="view">

@@ -23,3 +23,95 @@ document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.d
 function notify(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display='none',2200)}
 function openEmail(sender){let e=emails.find(x=>x.sender===sender);document.getElementById('pageTitle').textContent=e.subject;document.getElementById('pageSub').textContent='AI analysis · '+e.sender;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('inbox').classList.add('active');document.getElementById('inboxList').innerHTML=`<div class="reply"><div class="tags"><span class="tag ${e.priority}">${e.priority.toUpperCase()} PRIORITY</span><span class="tag">${e.cat}</span></div><h2>${e.subject}</h2><p style="color:var(--muted);font-size:13px">${e.sender}</p><div class="card" style="box-shadow:none;margin:20px 0"><b>✦ AI Summary</b><p style="font-size:13px;line-height:1.6;color:var(--muted)">${e.summary}</p><b>✅ Suggested action</b><p style="font-size:13px;color:var(--muted)">${e.priority==='high'?'Respond or complete the requested action as soon as possible.':'Review when convenient; no immediate action is required.'}</p></div><h3>Smart Reply</h3><textarea id="replyText">Thank you for the update. I’ve reviewed your message and will take the requested action. Please let me know if there is anything else you need from me.</textarea><div class="reply-tools"><select class="select"><option>Professional</option><option>Friendly</option><option>Concise</option><option>Formal</option></select><button class="btn primary" onclick="notify('AI reply generated')">✦ Generate reply</button></div></div>`}
 render();
+
+/* -----------------------------
+   DEPLOYED AI API
+----------------------------- */
+
+async function analyzeInbox() {
+
+  const status = document.getElementById("aiAnalysisStatus");
+
+  if (status) {
+    status.style.display = "block";
+    status.textContent = "✦ AlphaMail AI is analyzing the inbox...";
+  }
+
+  try {
+
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        emails: emails.map(email => ({
+          sender: email.sender,
+          subject: email.subject,
+          summary: email.summary,
+          priority: email.priority,
+          category: email.cat
+        }))
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI analysis failed");
+    }
+
+    if (status) {
+      status.textContent =
+        `✓ AI analysis complete · ${data.results.length} emails analyzed`;
+    }
+
+    notify("AI inbox analysis completed");
+
+    if (data.results && data.results.length) {
+      console.log("AlphaMail AI analysis:", data.results);
+    }
+
+  } catch (error) {
+
+    if (status) {
+      status.textContent =
+        "Demo mode: connect OPENAI_API_KEY to enable live AI analysis.";
+    }
+
+    notify("Live AI is not configured yet");
+
+    console.error(error);
+  }
+}
+
+async function generateLiveReply(emailText) {
+
+  try {
+
+    const response = await fetch("/api/reply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: emailText,
+        tone: "professional"
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Reply generation failed");
+    }
+
+    return data.reply;
+
+  } catch (error) {
+
+    console.error(error);
+
+    return null;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "alphamail-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AlphaMail AI - deployable AI email assistant",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
