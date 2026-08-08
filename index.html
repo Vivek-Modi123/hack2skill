@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlphaMail AI — Intelligent Email Assistant</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">Alpha<span>Mail</span> AI</div>
+  <nav class="nav">
+    <button class="active" data-view="dashboard"><i>⌂</i>Dashboard</button>
+    <button data-view="inbox"><i>✉</i>Inbox <span style="float:right">12</span></button>
+    <button data-view="tasks"><i>✓</i>Tasks & Deadlines</button>
+    <button data-view="security"><i>🛡</i>Security</button>
+    <button data-view="analytics"><i>◔</i>Analytics</button>
+  </nav>
+  <div class="side-bottom">
+
+    <div class="profile-wrap">
+
+      <button class="user profile-button" onclick="toggleProfileMenu()">
+
+        <div class="avatar">
+          VM
+        </div>
+
+        <div class="profile-text">
+          <b style="font-size:12px">Vivek</b>
+          <small>Free plan</small>
+        </div>
+
+        <span class="profile-chevron">⌄</span>
+
+      </button>
+
+      <div class="profile-menu" id="profileMenu">
+
+        <button onclick="notify('Profile opened')">
+          <span>👤</span>
+          My Profile
+        </button>
+
+        <button onclick="switchView('accounts'); closeProfileMenu()">
+          <span>⚙️</span>
+          Manage your accounts
+        </button>
+
+        <button onclick="notify('Notification settings opened'); closeProfileMenu()">
+          <span>🔔</span>
+          Notifications
+        </button>
+
+        <button onclick="switchView('security'); closeProfileMenu()">
+          <span>🔒</span>
+          Security
+        </button>
+
+        <div class="profile-divider"></div>
+
+        <button onclick="notify('Signed out'); closeProfileMenu()" class="logout">
+          <span>🚪</span>
+          Sign out
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</aside>
+
+<main class="main">
+<header class="top">
+ <div><h1 id="pageTitle">Good afternoon, Vivek</h1><p id="pageSub">Here's what AlphaMail AI found in your inbox.</p></div>
+ <div class="actions"><button class="btn" onclick="notify('Email sync completed')">↻ Sync</button><button class="btn primary" onclick="notify('Compose window opened')">＋ Compose</button></div>
+</header>
+
+<section id="dashboard" class="view active">
+ <div class="hero"><h2>✦ Your AI Inbox Briefing</h2><p>You have 3 urgent emails requiring attention today. Two contain deadlines and one message needs a reply.</p>
+  <div class="metric-row"><div class="metric"><b>3</b><span>Urgent today</span></div><div class="metric"><b>8</b><span>Pending tasks</span></div><div class="metric"><b>5</b><span>Upcoming deadlines</span></div></div>
+ </div>
+ <div class="cards">
+  <div class="card"><div class="label">TOTAL EMAILS</div><div class="num">248</div><div class="trend">↑ 14 today</div></div>
+  <div class="card"><div class="label">HIGH PRIORITY</div><div class="num" style="color:var(--red)">12</div><div class="trend">3 need action</div></div>
+  <div class="card"><div class="label">PENDING TASKS</div><div class="num" style="color:var(--yellow)">8</div><div class="trend">2 due today</div></div>
+  <div class="card"><div class="label">PHISHING RISK</div><div class="num" style="color:var(--green)">3</div><div class="trend">Protected by AI</div></div>
+ </div>
+ <div class="grid">
+  <div class="panel"><div class="panel-head"><h2>Priority Inbox</h2><div class="tabs"><button class="active">All</button><button>Unread</button><button>Urgent</button></div></div><div id="emailList"></div></div>
+  <div class="panel"><div class="panel-head"><h2>Tasks & Deadlines</h2><button class="btn" onclick="switchView('tasks')">View all</button></div><div class="side-list" id="taskList"></div>
+   <div class="alert"><strong>⚠ Potential phishing detected</strong><p>A suspicious message was detected and isolated. Review it in Security before opening links or attachments.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="inbox" class="view">
+ <div class="panel"><div class="panel-head"><h2>AI Inbox</h2><button class="btn primary" onclick="notify('Inbox re-analyzed by AI')">✦ Analyze inbox</button></div><div id="inboxList"></div></div>
+</section>
+
+<section id="tasks" class="view">
+ <div class="panel"><div class="panel-head"><h2>Tasks & Deadlines</h2><button class="btn primary" onclick="notify('New task created')">＋ Add task</button></div><div class="side-list" id="allTasks"></div></div>
+</section>
+
+<section id="security" class="view">
+ <div class="cards"><div class="card"><div class="label">EMAILS SCANNED</div><div class="num">248</div></div><div class="card"><div class="label">SAFE</div><div class="num" style="color:var(--green)">239</div></div><div class="card"><div class="label">SUSPICIOUS</div><div class="num" style="color:var(--yellow)">6</div></div><div class="card"><div class="label">PHISHING</div><div class="num" style="color:var(--red)">3</div></div></div>
+ <div class="panel"><div class="panel-head"><h2>Security Center</h2><span class="tag safe">AI protection active</span></div>
+ <div class="email"><div class="email-top"><span class="sender">⚠ finance-alert@paypa1-support.com</span><span class="tag high">87% risk</span></div><div class="subject">Your account will be suspended</div><div class="summary">AI detected a suspicious sender domain, urgency-based language and a request to sign in through an external link.</div><div class="tags"><span class="tag high">Phishing</span><span class="tag">Suspicious domain</span><span class="tag">Credential request</span></div></div>
+ <div class="email"><div class="email-top"><span class="sender">newsletter@productweekly.com</span><span class="tag safe">2% risk</span></div><div class="subject">Product Weekly — August edition</div><div class="summary">Marketing newsletter with no suspicious requests or attachments.</div><div class="tags"><span class="tag safe">Safe</span><span class="tag">Newsletter</span></div></div>
+ </div></section>
+
+<section id="analytics" class="view">
+ <div class="cards"><div class="card"><div class="label">TIME SAVED THIS WEEK</div><div class="num">3.8h</div><div class="trend">↑ 21%</div></div><div class="card"><div class="label">AI SUMMARIES</div><div class="num">184</div></div><div class="card"><div class="label">REPLIES GENERATED</div><div class="num">47</div></div><div class="card"><div class="label">TASKS EXTRACTED</div><div class="num">31</div></div></div>
+ <div class="panel"><div class="panel-head"><h2>Inbox intelligence</h2><span class="label">Last 7 days</span></div><div style="padding:30px"><div style="height:190px;display:flex;align-items:end;gap:14px;border-bottom:1px solid var(--line)"><div style="height:35%;flex:1;background:#dddafe;border-radius:6px 6px 0 0"></div><div style="height:55%;flex:1;background:#c9c4ff;border-radius:6px 6px 0 0"></div><div style="height:48%;flex:1;background:#b5afff;border-radius:6px 6px 0 0"></div><div style="height:72%;flex:1;background:#9b93ff;border-radius:6px 6px 0 0"></div><div style="height:62%;flex:1;background:#857bff;border-radius:6px 6px 0 0"></div><div style="height:84%;flex:1;background:#7168f7;border-radius:6px 6px 0 0"></div><div style="height:91%;flex:1;background:#635bff;border-radius:6px 6px 0 0"></div></div><div style="display:flex;justify-content:space-around;color:var(--muted);font-size:11px;padding-top:8px"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></div>
+</section>
+
+<!-- ACCOUNT MANAGEMENT -->
+<section id="accounts" class="view">
+
+  <div class="accounts-header">
+    <div>
+      <h2>Manage your accounts</h2>
+      <p>Connect and manage the email accounts used with AlphaMail AI.</p>
+    </div>
+    <button class="btn primary" onclick="addAccount()">＋ Add account</button>
+  </div>
+
+  <div class="account-grid" id="accountGrid"></div>
+
+  <div class="panel account-security-panel">
+    <div class="panel-head">
+      <h2>Account & privacy</h2>
+      <span class="tag safe">Protected</span>
+    </div>
+    <div class="account-setting">
+      <div>
+        <b>AI email analysis</b>
+        <p>Allow AlphaMail AI to analyze connected emails for summaries, tasks and priorities.</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked onchange="notify(this.checked ? 'AI analysis enabled' : 'AI analysis disabled')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="account-setting">
+      <div>
+        <b>Automatic inbox sync</b>
+        <p>Keep connected accounts synchronized with AlphaMail AI.</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked onchange="notify(this.checked ? 'Automatic sync enabled' : 'Automatic sync disabled')">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+</section>
+
+</main></div>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+
+</body>
+</html>
